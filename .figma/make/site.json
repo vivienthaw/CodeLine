@@ -1,0 +1,10 @@
+{
+  "description": "A collaborative Java learning game where university students match code to pseudocode, answer quizzes, and compete to defeat a professor boss while tracking class progress.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
