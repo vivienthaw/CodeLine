@@ -1,0 +1,154 @@
+/* CodeLine design tokens (UI_SPEC §0) + shared component animations (§1, §9). */
+
+@theme {
+  --color-primary: #1b365d;
+  --color-accent: #f28c28;
+  --color-success: #2ead6b;
+  --color-danger: #e5484d;
+  --color-muted: #9aa4b2;
+  --color-bg: #f5f7fa;
+  --color-surface: #ffffff;
+
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-marker: "Permanent Marker", "Comic Sans MS", cursive;
+
+  --radius-card: 12px;
+  --radius-chip: 8px;
+
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lift: 0 12px 28px rgba(27, 54, 93, 0.22);
+}
+
+/* ---------- keyframes ---------- */
+@keyframes cl-shake-x {
+  0%, 100% { transform: translateX(0); }
+  16%, 50%, 83% { transform: translateX(-6px); }
+  33%, 66% { transform: translateX(6px); }
+}
+@keyframes cl-boss-shake {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  20% { transform: translate(-6px, 2px) rotate(-3deg); }
+  40% { transform: translate(6px, -2px) rotate(3deg); }
+  60% { transform: translate(-4px, 1px) rotate(-2deg); }
+  80% { transform: translate(4px, 0) rotate(1deg); }
+}
+@keyframes cl-red-flash {
+  0% { opacity: 0.55; }
+  100% { opacity: 0; }
+}
+@keyframes cl-float-up {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(0.8); }
+  15% { opacity: 1; transform: translate(-50%, -8px) scale(1.1); }
+  100% { opacity: 0; transform: translate(-50%, -64px) scale(1); }
+}
+@keyframes cl-tip-over {
+  0% { transform: rotate(0); }
+  60% { transform: rotate(-95deg) translateY(10px); }
+  75% { transform: rotate(-85deg) translateY(10px); }
+  100% { transform: rotate(-90deg) translateY(10px); }
+}
+@keyframes cl-confetti {
+  0% { opacity: 1; transform: translate(0, 0) rotate(0); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); }
+}
+@keyframes cl-hp-flash {
+  0%, 100% { background-color: var(--color-danger); }
+  50% { background-color: #ff9a9d; }
+}
+@keyframes cl-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+@keyframes cl-swap-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes cl-toast-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes cl-snap {
+  0% { transform: scale(1.08); }
+  60% { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+@keyframes cl-tap {
+  0%, 100% { transform: rotate(0); }
+  50% { transform: rotate(-8deg); }
+}
+
+@keyframes cl-pop {
+  0% { transform: scale(0); opacity: 0; }
+  70% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@keyframes cl-dot {
+  0%, 20% { opacity: 0; }
+  40%, 100% { opacity: 1; }
+}
+@keyframes cl-countdown {
+  0% { transform: scale(1.6); opacity: 0; }
+  25% { transform: scale(1); opacity: 1; }
+  85% { transform: scale(0.95); opacity: 1; }
+  100% { transform: scale(0.7); opacity: 0; }
+}
+
+@keyframes cl-edge-pulse {
+  0%, 100% { box-shadow: inset 0 0 0 0 rgba(229, 72, 77, 0); }
+  50% { box-shadow: inset 0 0 120px 30px rgba(229, 72, 77, 0.55); }
+}
+
+/* Code must show the exact characters students type: no "==" → "═" or "<=" → "≤" ligatures. */
+@layer base {
+  code,
+  pre,
+  kbd,
+  .font-mono {
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "calt" 0;
+  }
+}
+
+/* ---------- utility classes ---------- */
+@layer components {
+  .cl-anim-shake { animation: cl-shake-x 400ms ease-in-out; }
+  .cl-anim-boss-shake { animation: cl-boss-shake 300ms ease-in-out; }
+  .cl-anim-flash { animation: cl-red-flash 400ms ease-out forwards; }
+  .cl-anim-float { animation: cl-float-up 800ms ease-out forwards; }
+  .cl-anim-tip { animation: cl-tip-over 900ms cubic-bezier(0.5, 0, 0.3, 1.2) forwards; transform-origin: 50% 90%; }
+  .cl-anim-confetti { animation: cl-confetti 2s ease-out forwards; }
+  .cl-anim-hp-flash { animation: cl-hp-flash 700ms ease-in-out infinite; }
+  .cl-anim-pulse { animation: cl-pulse 1s ease-in-out infinite; }
+  .cl-anim-toast { animation: cl-toast-in 200ms ease-out; }
+  .cl-anim-swap { animation: cl-swap-in 150ms ease-out; }
+  .cl-anim-snap { animation: cl-snap 350ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .cl-pointer-tap { animation: cl-tap 1.2s ease-in-out infinite; transform-origin: 30% 10%; transform-box: fill-box; }
+  .cl-hp-fill { transition: width 500ms ease-out, background-color 300ms; }
+  .cl-anim-pop { animation: cl-pop 350ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+  .cl-anim-countdown { animation: cl-countdown 1s ease-out both; }
+  .cl-dots span { animation: cl-dot 1.4s infinite both; }
+  .cl-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .cl-dots span:nth-child(3) { animation-delay: 0.4s; }
+  .cl-anim-edge-pulse { animation: cl-edge-pulse 1.4s ease-in-out infinite; }
+  .cl-doodle path { stroke-linecap: round; stroke-linejoin: round; }
+}
+
+/* Reduced motion: swap movement for colour-only feedback. */
+@media (prefers-reduced-motion: reduce) {
+  .cl-anim-shake,
+  .cl-anim-boss-shake,
+  .cl-anim-tip,
+  .cl-anim-snap,
+  .cl-anim-pulse,
+  .cl-pointer-tap,
+  .cl-anim-pop,
+  .cl-anim-swap,
+  .cl-anim-countdown {
+    animation: none !important;
+  }
+  .cl-anim-confetti { display: none; }
+  .cl-anim-edge-pulse { animation: none; box-shadow: inset 0 0 80px 20px rgba(229, 72, 77, 0.45); }
+  .cl-anim-float { animation-name: cl-red-flash; animation-duration: 1.2s; transform: translateX(-50%); }
+  .cl-hp-fill { transition: background-color 300ms; }
+}

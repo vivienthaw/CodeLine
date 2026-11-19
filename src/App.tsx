@@ -1,4 +1,22 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import DevPanel from "./DevPanel";
+import ComingSoon from "./pages/ComingSoon";
+import CodeLinePage from "./pages/CodeLine";
+import ComponentsDemo from "./pages/ComponentsDemo";
+import Join from "./pages/Join";
+import Lecturer from "./pages/Lecturer";
+import QuizPage from "./pages/Quiz";
+import ProjectorPage from "./pages/Projector";
+import ResultsPage from "./pages/Results";
+import StudentSync from "./StudentSync";
+import LobbyPage from "./pages/Lobby";
+import SignInPage from "./pages/SignIn";
+import { usePath } from "./router";
+import { AuthProvider } from "./lib/auth";
+import { ToastProvider } from "./components";
+import { MockupTag } from "./components/MockupTag";
+import { matchStaffRoute } from "./staff/StaffRoutes";
+import { matchMeRoute } from "./pages/me/MeRoutes";
 
 type Screen = "signin" | "lobby" | "activity" | "results" | "quiz" | "final" | "projector";
 
@@ -284,7 +302,7 @@ function SignIn({ onDone }: { onDone: () => void }) {
                   autoFocus
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@university.edu"
+                  placeholder="66130500047@ad.sit.kmutt.ac.th"
                 />
                 {error && <div className="form-error">{error}</div>}
                 <button className="primary-button" type="submit">
@@ -897,7 +915,52 @@ function Results({ final = false, onNext }: { final?: boolean; onNext: () => voi
   );
 }
 
+function Screen({ path }: { path: string }) {
+  const staff = matchStaffRoute(path);
+  if (staff) return staff;
+  const me = matchMeRoute(path);
+  if (me) return me;
+  switch (path) {
+    case "/":
+      return <SignInPage />;
+    case "/join":
+      return <Join />;
+    case "/lobby":
+      return <LobbyPage />;
+    case "/play/codeline":
+      return <CodeLinePage />;
+    case "/results":
+      return <ResultsPage />;
+    case "/projector":
+      return <ProjectorPage />;
+    case "/play/quiz":
+      return <QuizPage />;
+    case "/lecturer":
+      return <Lecturer />;
+    case "/components":
+      return <ComponentsDemo />;
+    case "/legacy":
+      return <LegacyApp />;
+    default:
+      return <ComingSoon title="Page not found" step={0} />;
+  }
+}
+
 export default function App() {
+  const path = usePath();
+  return (
+    <AuthProvider>
+      <ToastProvider>
+        <Screen path={path} />
+        <StudentSync />
+        <DevPanel />
+      <MockupTag />
+      </ToastProvider>
+    </AuthProvider>
+  );
+}
+
+function LegacyApp() {
   const [screen, setScreen] = useState<Screen>("signin");
   if (screen === "signin") return <SignIn onDone={() => setScreen("lobby")} />;
   if (screen === "lobby") return <Lobby onStart={() => setScreen("activity")} />;
