@@ -3,6 +3,7 @@ import { Avatar, Button, Icon, Input, formatTime } from "../components";
 import { CLASSMATES, ROUNDS, SESSION } from "../mock/data";
 import { live, resetLive, useLive, useRoundClock, type LiveSession, type RoundPhase } from "../mock/live";
 import { PROBLEM, bossHp, countFilled } from "../mock/problem";
+import { Link } from "../router";
 import { Logo } from "./SignIn";
 
 const SIM_TARGET = 38;
@@ -46,14 +47,13 @@ function ConsoleHeader() {
             <div className="text-[10px] font-bold uppercase tracking-widest text-primary/50">Class code</div>
             <div className="font-mono text-2xl font-bold tracking-[0.25em]">{code}</div>
           </div>
-          <a
-            href={`${import.meta.env.BASE_URL.replace(/\/+$/, "")}/projector`}
-            target="_blank"
-            rel="noreferrer"
+          {/* same tab: the mockup keeps the live session in memory, so a new tab wouldn't have it */}
+          <Link
+            to="/projector"
             className="inline-flex min-h-11 items-center gap-2 rounded-chip border-2 border-primary px-4 font-semibold hover:bg-primary/5"
           >
-            Open projector ↗
-          </a>
+            Open projector →
+          </Link>
         </>
       )}
     </header>

@@ -4,6 +4,7 @@ import { useDevAction } from "../devBus";
 import { CLASSMATES, ROUNDS } from "../mock/data";
 import { useLive, useLiveRounds, useRoundClock } from "../mock/live";
 import { HEAL_CAP, PROBLEM, SCORING, bossHp, countFilled, initialBoard, type Board } from "../mock/problem";
+import { Link } from "../router";
 import { Countdown } from "./Lobby";
 
 /**
@@ -52,6 +53,13 @@ function Stage({ children }: { children: ReactNode }) {
   }, []);
   return (
     <div className="fixed inset-0 overflow-hidden bg-[#0F223D]">
+      {/* quiet way back for the lecturer; brightens on hover/focus so it doesn't distract on the big screen */}
+      <Link
+        to="/lecturer"
+        className="absolute left-3 top-3 z-20 rounded-chip bg-white/10 px-3 py-1.5 text-sm font-semibold text-white/50 transition-colors hover:bg-white/20 hover:text-white focus-visible:text-white"
+      >
+        ← Lecturer console
+      </Link>
       <div
         className="absolute left-0 top-0 origin-top-left"
         style={{ width: W, height: H, transform: `translate(${box.x}px, ${box.y}px) scale(${box.scale})` }}
